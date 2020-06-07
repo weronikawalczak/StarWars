@@ -7,6 +7,7 @@ import com.weronika.nask.model.StarwarsCharacter;
 import com.weronika.nask.model.StarwarsCharacters;
 import com.weronika.nask.swapi.dto.CharacterDTO;
 import com.weronika.nask.swapi.dto.CharactersDTO;
+import com.weronika.nask.util.Util;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -47,12 +48,12 @@ public class StarwarsService {
 
         starwarsCharacters.setCount(starwarsCharactersDTO.getCount());
 
-        starwarsCharacters.setPages(0);//TODO
+        starwarsCharacters.setPages(getPageCount());
 
         CharacterDTO[] charactersDTO = starwarsCharactersDTO.getResults();
         for(int i = 0; i < charactersDTO.length; i++){
             StarwarsCharacter starwarsCharacter = characterMapper.map(charactersDTO[i], StarwarsCharacter.class);
-            starwarsCharacter.setId(i+1);
+            starwarsCharacter.setId(getElementsPerPage() * (page - 1) + (i+1));
             starwarsCharacter.setHomeworld(getHomeworld(charactersDTO[i].getHomeworld()));
             starwarsCharacter.setStarships(getStarships(charactersDTO[i]));
             starwarsCharacters.addElement(starwarsCharacter);
@@ -81,6 +82,20 @@ public class StarwarsService {
         return urlParts[urlParts.length-1];
     }
 
-    //TODO
-    //getPagesCount
+    public CharactersDTO getFirstPage(){
+        return starwarsClient.getCharactersByPage(1);
+    }
+
+    public int getPageCount(){
+        CharactersDTO charactersDTO = getFirstPage();
+        int elementsOnFirstPage = charactersDTO.getResults().length;
+        int allElementsCount = charactersDTO.getCount();
+
+        return Util.getCeilOfDivision(allElementsCount, elementsOnFirstPage);
+    }
+
+    public int getElementsPerPage(){
+        CharactersDTO charactersDTO = getFirstPage();
+        return charactersDTO.getResults().length;
+    }
 }
