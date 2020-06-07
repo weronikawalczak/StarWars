@@ -1,4 +1,4 @@
-package com.weronika.nask;
+package com.weronika.nask.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.weronika.nask;
+package com.weronika.nask.configuration;
 
 import com.weronika.nask.model.StarwarsCharacter;
 import com.weronika.nask.swapi.dto.CharacterDTO;
