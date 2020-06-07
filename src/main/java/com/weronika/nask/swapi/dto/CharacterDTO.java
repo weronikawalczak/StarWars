@@ -6,15 +6,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CharacterDTO {
-    String id;
+    int id;
     String name;
-    int height;
-    int mass;
+    String height;
+    String mass;
     String hair_color;
     String skin_color;
     String eye_color;
     String birth_year;
     String gender;
     String homeworld;
-    //List<String> starships;
+    String[] starships;
 }

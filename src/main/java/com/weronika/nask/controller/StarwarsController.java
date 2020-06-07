@@ -15,7 +15,7 @@ public class StarwarsController {
     }
 
     @GetMapping("/characters/{id}")
-    public StarwarsCharacter getCharacter(@PathVariable String id){
+    public StarwarsCharacter getCharacter(@PathVariable int id){
         return starwarsService.getCharacter(id);
     }
 }
