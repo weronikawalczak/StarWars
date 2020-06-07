@@ -16,6 +16,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<model.mapper.version>2.3.8</model.mapper.version>
 	</properties>
 
 	<dependencies>
@@ -43,7 +44,7 @@
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
-			<version>2.3.8</version>
+			<version>${model.mapper.version}</version>
 		</dependency>
 	</dependencies>
 

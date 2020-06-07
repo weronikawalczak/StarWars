@@ -1,8 +1,8 @@
 package com.weronika.nask.client;
 
-import com.weronika.nask.model.Homeworld;
 import com.weronika.nask.model.Starship;
 import com.weronika.nask.swapi.dto.CharacterDTO;
+import com.weronika.nask.swapi.dto.HomeworldDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -23,8 +23,9 @@ public class StarwarsClient {
         return restTemplate.getForObject(url, CharacterDTO.class);
     }
 
-    public Homeworld getHomeworld(String homeworldURL){
-        return restTemplate.getForObject(homeworldURL, Homeworld.class);
+    public HomeworldDTO getHomeworld(String id){
+        String url = String.format("%s/planets/%s/", swapiPath, id);
+        return restTemplate.getForObject(url, HomeworldDTO.class);
     }
 
     public Starship getStarship(String id){
