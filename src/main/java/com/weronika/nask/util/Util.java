@@ -6,8 +6,8 @@ public class Util {
         return (int) Math.ceil((double) a/b);
     }
 
-    public static String getLastDigitFromURL(String url){
+    public static int getLastDigitFromURL(String url){
         String[] urlParts = url.split("/");
-        return urlParts[urlParts.length-1];
+        return Integer.parseInt(urlParts[urlParts.length-1]);
     }
 }

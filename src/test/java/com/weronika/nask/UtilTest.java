@@ -25,4 +25,15 @@ public class UtilTest {
 
         Assertions.assertEquals(1, pages);
     }
+
+    @Test
+    public void testGettingLastDigitFromURL(){
+        String characterId = "15";
+
+        String url = String.format("https://swapi.dev/api/people/%s/", characterId);
+
+        int lastDigitFromURL = Util.getLastDigitFromURL(url);
+
+        Assertions.assertEquals(Integer.valueOf(characterId), lastDigitFromURL);
+    }
 }

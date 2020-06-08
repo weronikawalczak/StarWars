@@ -95,7 +95,5 @@ public class StarwarsServiceImpl implements StarwarsService {
         starwarsCharacter.setId(id);
         return starwarsCharacter;
     }
-
     //TODO do we really need to calculate pageSize and pageCount manually? Let's read more in the docs
-
 }
