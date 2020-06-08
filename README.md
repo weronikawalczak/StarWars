@@ -11,10 +11,11 @@ Interview assigment for NASK. The application allows to browse the Star Wars uni
 * Docker
 * Swagger
 * Prometheus
+* Lombok
 
 ## Setup
 You can either import and run the application using your favorite IDE or use the following commands.
-
+//TODO mention docker
 Build an executable .jar-file with Maven:
 
 <pre>
@@ -27,13 +28,23 @@ Then run the application:
 java -jar ./target/starwars-0.0.1-SNAPSHOT.jar
 </pre>
 
+### Cache
+In order to create responses with all the data from swapi, this application
+performs many requests to the external swapi endpoints. This is an obvious bottleneck.
+To avoid performance drop and swapi flooding there is a cache introduced for methods calling swapi endpoints.
+Since data related to starwars characters is not volatile, 
+this cache may be having a very long time to live, probably even infinite. 
+This can be set by caffeine properties in application.properties 
+
 ### Swager UI
-Visit: http://localhost:8080/swagger-ui.html
+The application supports swagger endpoint for visualising our API
+To reach swagger when the application is running visit:
+http://localhost:8080/swagger-ui.html
 
 ### Docker
 This application is set on Docker. 
 
 ### Prometheus
-This application is ready to be monitored by Prometheus. 
-Visit:
-
+This application supports prometheus monitoring.
+To reach prometheus when the application is running visit:
+http://localhost:8080/actuator/prometheus

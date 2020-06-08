@@ -10,4 +10,8 @@ public class Util {
         String[] urlParts = url.split("/");
         return Integer.parseInt(urlParts[urlParts.length-1]);
     }
+
+    public static int calculateCharacterIdByPage(int pageSize, int pageNumber, int indexOnPage){
+        return pageSize * (pageNumber - 1) + indexOnPage;
+    }
 }

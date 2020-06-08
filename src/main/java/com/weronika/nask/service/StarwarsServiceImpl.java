@@ -8,8 +8,6 @@ import com.weronika.nask.model.StarwarsCharacters;
 import com.weronika.nask.swapi.dto.CharacterDTO;
 import com.weronika.nask.swapi.dto.CharactersDTO;
 import com.weronika.nask.util.Util;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,18 +17,19 @@ import java.util.List;
 @Service
 public class StarwarsServiceImpl implements StarwarsService {
     private final StarwarsClient starwarsClient;
-    private final ModelMapper characterMapper;
 
-    public StarwarsServiceImpl(StarwarsClient starwarsClient,
-                               @Qualifier("CharacterMapper") ModelMapper characterMapper) {
+    public StarwarsServiceImpl(StarwarsClient starwarsClient) {
         this.starwarsClient = starwarsClient;
-        this.characterMapper = characterMapper;
     }
 
     @Override
     public StarwarsCharacter getCharacter(int id){
         CharacterDTO characterDTO = starwarsClient.getCharacterById(id);
-        return mapToStarwarsCharacter(characterDTO, id);
+        return new StarwarsCharacter.Builder().ofDTO(characterDTO)
+                .withId(id)
+                .withHomeworld(getHomeworld(characterDTO))
+                .withStarships(getStarships(characterDTO))
+                .build();
     }
 
     @Override
@@ -38,9 +37,14 @@ public class StarwarsServiceImpl implements StarwarsService {
         CharactersDTO starwarsCharactersDTO = starwarsClient.getCharactersByPage(page);
         StarwarsCharacters starwarsCharacters = new StarwarsCharacters();
 
-        CharacterDTO[] charactersDTO = starwarsCharactersDTO.getResults();
-        for(int i = 0; i < charactersDTO.length; i++){
-            StarwarsCharacter starwarsCharacter = mapToStarwarsCharacter(charactersDTO[i], calculateCharacterId(page, i));
+        CharacterDTO[] characterDTOs = starwarsCharactersDTO.getResults();
+        for(int i = 0; i < characterDTOs.length; i++){
+            StarwarsCharacter starwarsCharacter = new StarwarsCharacter.Builder().ofDTO(characterDTOs[i])
+                    .withId(Util.calculateCharacterIdByPage(getPageSize(), page, i+1))
+                    .withHomeworld(getHomeworld(characterDTOs[i]))
+                    .withStarships(getStarships(characterDTOs[i]))
+                    .build();
+
             starwarsCharacters.addElement(starwarsCharacter);
         }
 
@@ -49,6 +53,9 @@ public class StarwarsServiceImpl implements StarwarsService {
         return starwarsCharacters;
     }
 
+    /**
+     * Because of Swapi providing only count of all characters, this method needs to calculate pages count based on first page.
+     */
     @Override
     public int getPageCount(){
         CharactersDTO charactersDTO = getFirstPage();
@@ -58,18 +65,23 @@ public class StarwarsServiceImpl implements StarwarsService {
         return Util.getCeilOfDivision(allElementsCount, elementsOnFirstPage);
     }
 
+    /**
+     * Because of Swapi providing only count of all characters, this method needs to calculate page size based on first page.
+     */
     @Override
     public int getPageSize(){
         CharactersDTO charactersDTO = getFirstPage();
         return charactersDTO.getResults().length;
     }
 
-    private Homeworld getHomeworld(CharacterDTO characterDTO) {
+    @Override
+    public Homeworld getHomeworld(CharacterDTO characterDTO) {
         String homeworldURL = characterDTO.getHomeworld();
         return starwarsClient.getHomeworld(Util.getLastDigitFromURL(homeworldURL));
     }
 
-    private List<Starship> getStarships(CharacterDTO characterDTO) {
+    @Override
+    public List<Starship> getStarships(CharacterDTO characterDTO) {
         List<Starship> starships = new ArrayList<>();
 
         Arrays.asList(characterDTO.getStarships()).forEach(starshipUrl -> {
@@ -83,17 +95,4 @@ public class StarwarsServiceImpl implements StarwarsService {
     private CharactersDTO getFirstPage(){
         return starwarsClient.getCharactersByPage(1);
     }
-
-    private int calculateCharacterId(int page, int elementIndex){
-        return getPageSize() * (page - 1) + (elementIndex+1);
-    }
-
-    private StarwarsCharacter mapToStarwarsCharacter(CharacterDTO characterDTO, int id){
-        StarwarsCharacter starwarsCharacter = characterMapper.map(characterDTO, StarwarsCharacter.class);
-        starwarsCharacter.setHomeworld(getHomeworld(characterDTO));
-        starwarsCharacter.setStarships(getStarships(characterDTO));
-        starwarsCharacter.setId(id);
-        return starwarsCharacter;
-    }
-    //TODO do we really need to calculate pageSize and pageCount manually? Let's read more in the docs
 }

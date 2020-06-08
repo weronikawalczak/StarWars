@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<model.mapper.version>2.3.8</model.mapper.version>
+		<junit.version>5.4.0</junit.version>
 	</properties>
 
 	<dependencies>
@@ -84,6 +85,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.platform</groupId>
+						<artifactId>junit-platform-surefire-provider</artifactId>
+						<version>1.0.1</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
