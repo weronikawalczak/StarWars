@@ -14,8 +14,11 @@ Interview assigment for NASK. The application allows to browse the Star Wars uni
 * Lombok
 
 ## Setup
-You can either import and run the application using your favorite IDE or use the following commands.
-//TODO mention docker
+1. You can either import and run the application using your favorite IDE or use the following commands.
+
+$ docker build -t weronika-nask .
+$ docker run -p 8081:8081 weronika-nask
+
 Build an executable .jar-file with Maven:
 
 <pre>
@@ -42,7 +45,10 @@ To reach swagger when the application is running visit:
 http://localhost:8080/swagger-ui.html
 
 ### Docker
-This application is set on Docker. 
+This application is provided with Dockerfile allowing to easily create an application docker image.
+<pre>
+$ docker build -t weronika-nask .
+</pre>
 
 ### Prometheus
 This application supports prometheus monitoring.

@@ -1,17 +1,16 @@
-package com.weronika.nask.configuration;
+package com.weronika.nask;
 
+import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@Profile("!test")
-public class AppConfiguration {
-
+@Profile("test")
+public class TestAppConfig {
     @Bean
     public RestTemplate restTemplate(){
-        return new RestTemplate();
+        return Mockito.mock(RestTemplate.class);
     }
-
 }

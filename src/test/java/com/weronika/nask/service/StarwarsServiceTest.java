@@ -122,6 +122,5 @@ public class StarwarsServiceTest {
 
        Assertions.assertEquals(TEST_CHARACTER_DTOS.length, result.getElements().size());
        Assertions.assertEquals(TOTAL_ELEMENTS_COUNT, result.getCount());
-       //TODO check character id by pages
     }
 }

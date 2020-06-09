@@ -28,25 +28,27 @@ public class StarwarsClient {
     @Cacheable("character")
     public CharacterDTO getCharacterById(int id){
         String url = String.format("%s/people/%s/", swapiPath, id);
-        logger.debug(String.format("Fetching character from Swapi with url: %s", url));
+        logger.debug(String.format("Fetching character by calling url: '%s'", url));
 
         try{
             return restTemplate.getForObject(url, CharacterDTO.class);
         }
         catch (HttpClientErrorException.NotFound e){
-             throw new ElementNotFoundException("Character", id);
+            logger.error(String.format("Error fetching character by calling url: '%s'", url));
+            throw new ElementNotFoundException("Character", id);
         }
     }
 
     @Cacheable("characters")
     public CharactersDTO getCharactersByPage(int page){
         String url = String.format("%s/people/?page=%s", swapiPath, page);
-        logger.debug(String.format("Fetching characters from Swapi with url: %s", url));
+        logger.debug(String.format("Fetching characters by calling url: '%s'", url));
 
         try{
             return restTemplate.getForObject(url, CharactersDTO.class);
         }
         catch (HttpClientErrorException.NotFound e){
+            logger.error(String.format("Error fetching characters by calling url: '%s'", url));
             throw new ElementNotFoundException("Page", page);
         }
     }
@@ -60,6 +62,7 @@ public class StarwarsClient {
             return restTemplate.getForObject(url, Homeworld.class);
         }
         catch (HttpClientErrorException.NotFound e){
+            logger.error(String.format("Error fetching homeworld by calling url: '%s'", url));
             throw new ElementNotFoundException("Homeworld", id);
         }
     }
@@ -67,12 +70,13 @@ public class StarwarsClient {
     @Cacheable("starship")
     public Starship getStarship(int id){
         String url = String.format("%s/starships/%s/", swapiPath, id);
-        logger.debug(String.format("Fetching starship from Swapi with url: %s", url));
+        logger.debug(String.format("Fetching starship by calling url: '%s'", url));
 
         try{
             return restTemplate.getForObject(url, Starship.class);
         }
         catch (HttpClientErrorException.NotFound e){
+            logger.error(String.format("Error fetching starship by calling url: '%s'", url));
             throw new ElementNotFoundException("Starship", id);
         }
     }

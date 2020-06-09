@@ -7,7 +7,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class CharactersDTO {
     int count;
-    String next;
-    String previous;
     CharacterDTO[] results;
 }
