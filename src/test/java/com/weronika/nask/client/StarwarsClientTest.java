@@ -64,8 +64,6 @@ class StarwarsClientTest {
         Assertions.assertThrows(ElementNotFoundException.class, () -> subject.getCharacterById(ID));
     }
 
-    //#####
-
     @Test
     void testGetCharactersByPage() {
         String path = String.format("%s/people/?page=%s",SWAPI_PATH, PAGE);
@@ -84,8 +82,6 @@ class StarwarsClientTest {
         Assertions.assertThrows(ElementNotFoundException.class, () -> subject.getCharactersByPage(PAGE));
     }
 
-    //#####
-
     @Test
     void testGetHomeworld() {
         String path = String.format("%s/planets/%s/",SWAPI_PATH, ID);
@@ -103,8 +99,6 @@ class StarwarsClientTest {
         when(restTemplate.getForObject(path, Homeworld.class)).thenThrow(HttpClientErrorException.NotFound.class);
         Assertions.assertThrows(ElementNotFoundException.class, () -> subject.getHomeworld(ID));
     }
-
-    //#####
 
     @Test
     void testGetStarship() {
