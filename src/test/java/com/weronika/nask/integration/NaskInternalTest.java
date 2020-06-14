@@ -11,6 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -44,5 +49,28 @@ class NaskInternalTest {
 		starwarsService.getHomeworld(characterDTO);
 
 		verify(restTemplate, times(1)).getForObject(homeworldPath, Homeworld.class);
+	}
+
+	@Test
+	public void multithradedCache(){
+		int homeworldId = 22;
+		final String homeworldPath = String.format("%s/planets/%s/", swapiPath, homeworldId);
+
+		when(characterDTO.getHomeworld()).thenReturn(homeworldPath);
+		when(restTemplate.getForObject(homeworldPath, Homeworld.class)).thenReturn(homeworld);
+
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		Future<Homeworld> future1 = executorService.submit(() -> starwarsService.getHomeworld(characterDTO));
+		Future<Homeworld> future2 = executorService.submit(() -> starwarsService.getHomeworld(characterDTO));
+		try {
+			future1.get();
+			future2.get();
+
+			verify(restTemplate, times(1)).getForObject(homeworldPath, Homeworld.class);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 }

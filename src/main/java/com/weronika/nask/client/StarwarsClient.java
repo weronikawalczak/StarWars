@@ -25,7 +25,7 @@ public class StarwarsClient {
         this.swapiPath = swapiPath;
     }
 
-    @Cacheable("character")
+    @Cacheable(value = "character", sync = true)
     public CharacterDTO getCharacterById(int id){
         String url = String.format("%s/people/%s/", swapiPath, id);
         logger.debug(String.format("Fetching character by calling url: '%s'", url));
@@ -34,12 +34,12 @@ public class StarwarsClient {
             return restTemplate.getForObject(url, CharacterDTO.class);
         }
         catch (HttpClientErrorException.NotFound e){
-            logger.error(String.format("Error fetching character by calling url: '%s'", url));
+            logger.warn(String.format("Error fetching character by calling url: '%s'", url));
             throw new ElementNotFoundException("Character", id);
         }
     }
 
-    @Cacheable("characters")
+    @Cacheable(value = "characters", sync = true)
     public CharactersDTO getCharactersByPage(int page){
         String url = String.format("%s/people/?page=%s", swapiPath, page);
         logger.debug(String.format("Fetching characters by calling url: '%s'", url));
@@ -48,12 +48,12 @@ public class StarwarsClient {
             return restTemplate.getForObject(url, CharactersDTO.class);
         }
         catch (HttpClientErrorException.NotFound e){
-            logger.error(String.format("Error fetching characters by calling url: '%s'", url));
+            logger.warn(String.format("Error fetching characters by calling url: '%s'", url));
             throw new ElementNotFoundException("Page", page);
         }
     }
 
-    @Cacheable("homeworld")
+    @Cacheable(value = "homeworld", sync = true)
     public Homeworld getHomeworld(int id){
         String url = String.format("%s/planets/%s/", swapiPath, id);
         logger.debug(String.format("Fetching homeworld from Swapi with url: %s", url));
@@ -62,12 +62,12 @@ public class StarwarsClient {
             return restTemplate.getForObject(url, Homeworld.class);
         }
         catch (HttpClientErrorException.NotFound e){
-            logger.error(String.format("Error fetching homeworld by calling url: '%s'", url));
+            logger.warn(String.format("Error fetching homeworld by calling url: '%s'", url));
             throw new ElementNotFoundException("Homeworld", id);
         }
     }
 
-    @Cacheable("starship")
+    @Cacheable(value = "starship", sync = true)
     public Starship getStarship(int id){
         String url = String.format("%s/starships/%s/", swapiPath, id);
         logger.debug(String.format("Fetching starship by calling url: '%s'", url));
@@ -76,7 +76,7 @@ public class StarwarsClient {
             return restTemplate.getForObject(url, Starship.class);
         }
         catch (HttpClientErrorException.NotFound e){
-            logger.error(String.format("Error fetching starship by calling url: '%s'", url));
+            logger.warn(String.format("Error fetching starship by calling url: '%s'", url));
             throw new ElementNotFoundException("Starship", id);
         }
     }
