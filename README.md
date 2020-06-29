@@ -1,6 +1,6 @@
-# NASK - Interview assignment
+# Star Wars 
 ## Overview
-Interview assignment for NASK. The application allows to browse the Star Wars universe through a REST API.
+The application allows to browse the Star Wars universe through a REST API.
 
 ## Technologies
 * Java JDK 11
